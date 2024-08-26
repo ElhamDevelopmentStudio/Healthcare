@@ -1,4 +1,3 @@
-// src/store/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import doctorReducer from "./slices/DoctorSlice";
 import favoriteReducer from "./slices/FavoriteSlice";

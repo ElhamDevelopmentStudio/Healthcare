@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Container,
@@ -14,9 +15,13 @@ import {
   Checkbox,
   Pagination,
 } from "@mantine/core";
-import { Search, Filter, Activity, Baby, Brain, Heart } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { BadgeCard } from "../components/ui/BadgeCard/BadgeCard";
-import { fetchDoctors, Doctor } from "../redux/slices/DoctorSlice";
+import {
+  fetchDoctors,
+  selectAllDoctors,
+  Doctor,
+} from "../redux/slices/DoctorSlice";
 import { useAppDispatch } from "../redux/store";
 
 const containerVariants = {
@@ -41,164 +46,24 @@ const itemVariants = {
   },
 };
 
-const mockDoctors: Doctor[] = [
-  {
-    id: "1",
-    image:
-      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. Jane Smith",
-    specialty: "Cardiologist",
-    description:
-      "Experienced cardiologist with over 15 years of practice. Specializes in preventive cardiology and heart disease management.",
-    badges: [
-      { icon: <Heart size={14} />, label: "Heart Disease" },
-      { icon: <Activity size={14} />, label: "Tension" },
-    ],
-    availability: ["monday", "wednesday", "friday"],
-    price: 200,
-  },
-  {
-    id: "2",
-    image:
-      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. John Doe",
-    specialty: "Neurologist",
-    description:
-      "Board-certified neurologist specializing in stroke prevention and treatment of neurological disorders.",
-    badges: [
-      { icon: <Brain size={14} />, label: "Neurology" },
-      { icon: <Activity size={14} />, label: "Stroke" },
-    ],
-    availability: ["tuesday", "thursday", "saturday"],
-    price: 250,
-  },
-  {
-    id: "3",
-    image:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. Emily Brown",
-    specialty: "Pediatrician",
-    description:
-      "Compassionate pediatrician with a focus on child development and preventive care.",
-    badges: [
-      { icon: <Baby size={14} />, label: "Child Health" },
-      { icon: <Activity size={14} />, label: "Vaccines" },
-    ],
-    availability: ["monday", "tuesday", "wednesday", "thursday", "friday"],
-    price: 180,
-  },
-  {
-    id: "4",
-    image:
-      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. Jane Smith",
-    specialty: "Cardiologist",
-    description:
-      "Experienced cardiologist with over 15 years of practice. Specializes in preventive cardiology and heart disease management.",
-    badges: [
-      { icon: <Heart size={14} />, label: "Heart Disease" },
-      { icon: <Activity size={14} />, label: "Tension" },
-    ],
-    availability: ["monday", "wednesday", "friday"],
-    price: 200,
-  },
-  {
-    id: "5",
-    image:
-      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. John Doe",
-    specialty: "Neurologist",
-    description:
-      "Board-certified neurologist specializing in stroke prevention and treatment of neurological disorders.",
-    badges: [
-      { icon: <Brain size={14} />, label: "Neurology" },
-      { icon: <Activity size={14} />, label: "Stroke" },
-    ],
-    availability: ["tuesday", "thursday", "saturday"],
-    price: 250,
-  },
-  {
-    id: "6",
-    image:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. Emily Brown",
-    specialty: "Pediatrician",
-    description:
-      "Compassionate pediatrician with a focus on child development and preventive care.",
-    badges: [
-      { icon: <Baby size={14} />, label: "Child Health" },
-      { icon: <Activity size={14} />, label: "Vaccines" },
-    ],
-    availability: ["monday", "tuesday", "wednesday", "thursday", "friday"],
-    price: 180,
-  },
-  {
-    id: "7",
-    image:
-      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. Jane Smith",
-    specialty: "Cardiologist",
-    description:
-      "Experienced cardiologist with over 15 years of practice. Specializes in preventive cardiology and heart disease management.",
-    badges: [
-      { icon: <Heart size={14} />, label: "Heart Disease" },
-      { icon: <Activity size={14} />, label: "Tension" },
-    ],
-    availability: ["monday", "wednesday", "friday"],
-    price: 200,
-  },
-  {
-    id: "8",
-    image:
-      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. John Doe",
-    specialty: "Neurologist",
-    description:
-      "Board-certified neurologist specializing in stroke prevention and treatment of neurological disorders.",
-    badges: [
-      { icon: <Brain size={14} />, label: "Neurology" },
-      { icon: <Activity size={14} />, label: "Stroke" },
-    ],
-    availability: ["tuesday", "thursday", "saturday"],
-    price: 250,
-  },
-  {
-    id: "9",
-    image:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    name: "Dr. Emily Brown",
-    specialty: "Pediatrician",
-    description:
-      "Compassionate pediatrician with a focus on child development and preventive care.",
-    badges: [
-      { icon: <Baby size={14} />, label: "Child Health" },
-      { icon: <Activity size={14} />, label: "Vaccines" },
-    ],
-    availability: ["monday", "tuesday", "wednesday", "thursday", "friday"],
-    price: 180,
-  },
-];
-
 export function DoctorListPage() {
   const dispatch = useAppDispatch();
-  const [doctors, setDoctors] = useState<Doctor[]>(mockDoctors);
+  const doctors = useSelector(selectAllDoctors);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [specialty, setSpecialty] = useState<string>("All Specialties");
+  const [specialty, setSpecialty] = useState<string | null>(null);
   const [availability, setAvailability] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [currentPage, setCurrentPage] = useState(1);
-
-  console.log(specialty);
 
   useEffect(() => {
     dispatch(fetchDoctors());
   }, [dispatch]);
 
-  const filteredDoctors = doctors.filter((doctor) => {
+  const filteredDoctors = doctors.filter((doctor: Doctor) => {
     return (
       doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (specialty === "All Specialties" || doctor.specialty === specialty) &&
+      (!specialty || doctor.specialty === specialty) &&
       (availability.length === 0 ||
         availability.some((day) => doctor.availability.includes(day))) &&
       doctor.price >= priceRange[0] &&
@@ -241,14 +106,15 @@ export function DoctorListPage() {
                 "All Specialties",
                 "Cardiology",
                 "Neurology",
-                "Pediatrician",
+                "Pediatrics",
                 "Oncology",
               ]}
               placeholder="Select specialty"
               value={specialty}
-              onChange={(value) => setSpecialty(value || "All Specialties")}
+              onChange={setSpecialty}
               leftSection={<Filter size={16} />}
               size="md"
+              clearable
             />
           </Group>
 
@@ -257,15 +123,20 @@ export function DoctorListPage() {
               <Accordion.Control>Advanced Filters</Accordion.Control>
               <Accordion.Panel>
                 <Grid>
-                  <Grid.Col className="justify-center items-center">
-                    <Text size="sm" fw={500} mb="xs">
+                  <Grid.Col span={{ base: 12, md: 6 }}>
+                    <Text
+                      size="sm"
+                      fw={500}
+                      mb="xs"
+                      className="flex items-center justify-center"
+                    >
                       Availability
                     </Text>
                     <Checkbox.Group
                       value={availability}
                       onChange={setAvailability}
                     >
-                      <Group className="flex justify-center items-center mt-5 ">
+                      <Group>
                         <Checkbox value="monday" label="Mon" />
                         <Checkbox value="tuesday" label="Tue" />
                         <Checkbox value="wednesday" label="Wed" />
@@ -279,6 +150,7 @@ export function DoctorListPage() {
                       Price Range
                     </Text>
                     <RangeSlider
+                      className="mb-5"
                       min={0}
                       max={500}
                       step={10}
@@ -289,7 +161,6 @@ export function DoctorListPage() {
                         { value: 250, label: "$250" },
                         { value: 500, label: "$500" },
                       ]}
-                      className="mb-2"
                     />
                   </Grid.Col>
                 </Grid>

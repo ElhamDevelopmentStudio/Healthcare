@@ -25,11 +25,20 @@ const initialState: DoctorState = {
   error: null,
 };
 
-export const fetchDoctors = createAsyncThunk(
+export const fetchDoctors = createAsyncThunk<Doctor[]>(
   "doctors/fetchDoctors",
   async () => {
-    // Replace this with your actual API call
-    const response = await fetch("https://api.example.com/doctors");
+    const response = await fetch("http://localhost:3001/doctors", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
     const data = await response.json();
     return data;
   }

@@ -36,7 +36,12 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
     >
       <Card withBorder radius="md" p="md" className={classes.card}>
         <Card.Section>
-          <Image src={doctor.image} alt={doctor.name} height={250} />
+          <Image
+            src={doctor.image}
+            alt={doctor.name}
+            height={250}
+            style={{ objectFit: "cover" }} // Ensure images have consistent height and fill the space
+          />
         </Card.Section>
         <Box className={classes.contentWrapper}>
           <Card.Section className={classes.section} mt="md">
