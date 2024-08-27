@@ -1,4 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 export interface Doctor {
   id: string;
@@ -9,18 +10,20 @@ export interface Doctor {
   badges: { icon: React.ReactNode; label: string }[];
   availability: string[];
   price: number;
+  bio?: string;
+  qualifications?: string[];
 }
 
 interface DoctorState {
   doctors: Doctor[];
-  favorites: string[];
+  selectedDoctor: Doctor | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: DoctorState = {
   doctors: [],
-  favorites: JSON.parse(localStorage.getItem("favorites") || "[]"),
+  selectedDoctor: null,
   status: "idle",
   error: null,
 };
@@ -28,61 +31,60 @@ const initialState: DoctorState = {
 export const fetchDoctors = createAsyncThunk<Doctor[]>(
   "doctors/fetchDoctors",
   async () => {
-    const response = await fetch("http://localhost:3001/doctors", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-
+    const response = await fetch("http://localhost:3001/doctors");
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
+    return response.json();
+  }
+);
 
-    const data = await response.json();
-    return data;
+export const fetchDoctorById = createAsyncThunk<Doctor, string>(
+  "doctors/fetchDoctorById",
+  async (doctorId) => {
+    const response = await fetch(`http://localhost:3001/doctor/${doctorId}`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
   }
 );
 
 const doctorSlice = createSlice({
   name: "doctors",
   initialState,
-  reducers: {
-    setDoctors: (state, action: PayloadAction<Doctor[]>) => {
-      state.doctors = action.payload;
-    },
-    toggleFavorite: (state, action: PayloadAction<string>) => {
-      const doctorId = action.payload;
-      const index = state.favorites.indexOf(doctorId);
-      if (index !== -1) {
-        state.favorites.splice(index, 1);
-      } else {
-        state.favorites.push(doctorId);
-      }
-      localStorage.setItem("favorites", JSON.stringify(state.favorites));
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchDoctors.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        fetchDoctors.fulfilled,
-        (state, action: PayloadAction<Doctor[]>) => {
-          state.status = "succeeded";
-          state.doctors = action.payload;
-        }
-      )
+      .addCase(fetchDoctors.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.doctors = action.payload;
+      })
       .addCase(fetchDoctors.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something went wrong";
+      })
+      .addCase(fetchDoctorById.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchDoctorById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.selectedDoctor = action.payload;
+      })
+      .addCase(fetchDoctorById.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Something went wrong";
       });
   },
 });
 
-export const { setDoctors, toggleFavorite } = doctorSlice.actions;
 export default doctorSlice.reducer;
 
-export const selectAllDoctors = (state: { doctors: DoctorState }) =>
-  state.doctors.doctors;
+export const selectAllDoctors = (state: RootState) => state.doctors.doctors;
+export const selectSelectedDoctor = (state: RootState) =>
+  state.doctors.selectedDoctor;
+export const selectDoctorsStatus = (state: RootState) => state.doctors.status;
+export const selectDoctorsError = (state: RootState) => state.doctors.error;

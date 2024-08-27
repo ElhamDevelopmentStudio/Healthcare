@@ -10,18 +10,19 @@ import {
   ActionIcon,
   Box,
 } from "@mantine/core";
-import { useDispatch, useSelector } from "react-redux";
-import { Doctor, toggleFavorite } from "../../../redux/slices/DoctorSlice";
-import { RootState } from "../../../redux/store";
+import { toggleFavorite } from "../../../redux/slices/FavoriteSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import classes from "./BadgeCard.module.css";
+import { Doctor } from "../../../redux/slices/DoctorSlice";
+import { Link } from "react-router-dom";
 
 interface BadgeCardProps {
   doctor: Doctor;
 }
 
 export function BadgeCard({ doctor }: BadgeCardProps) {
-  const dispatch = useDispatch();
-  const favorites = useSelector((state: RootState) => state.doctors.favorites);
+  const dispatch = useAppDispatch();
+  const favorites = useAppSelector((state) => state.favorites.favorites);
   const isFavorite = favorites.includes(doctor.id);
 
   const handleFavorite = () => {
@@ -40,7 +41,7 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
             src={doctor.image}
             alt={doctor.name}
             height={250}
-            style={{ objectFit: "cover" }} // Ensure images have consistent height and fill the space
+            style={{ objectFit: "cover" }}
           />
         </Card.Section>
         <Box className={classes.contentWrapper}>
@@ -88,7 +89,7 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
         <Group mt="xs" className={classes.footer}>
           <motion.div style={{ flex: 1 }} whileHover={{ scale: 1.02 }}>
             <Button radius="md" fullWidth color="blue">
-              Book Appointment
+              <Link to={`/doctor/${doctor.id}`}>Book Appointment</Link>
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>

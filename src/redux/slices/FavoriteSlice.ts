@@ -5,13 +5,8 @@ interface FavoriteState {
   favorites: string[];
 }
 
-const loadFavoritesFromStorage = (): string[] => {
-  const storedFavorites = localStorage.getItem("favorites");
-  return storedFavorites ? JSON.parse(storedFavorites) : [];
-};
-
 const initialState: FavoriteState = {
-  favorites: loadFavoritesFromStorage(),
+  favorites: [],
 };
 
 const favoriteSlice = createSlice({
@@ -25,7 +20,6 @@ const favoriteSlice = createSlice({
       } else {
         state.favorites.push(action.payload);
       }
-      localStorage.setItem("favorites", JSON.stringify(state.favorites));
     },
   },
 });
