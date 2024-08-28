@@ -46,7 +46,7 @@ export function Sidebar({
       transition: {
         type: "spring",
         stiffness: 100,
-        duration: 0.5, // Set the duration to 500ms
+        duration: 0.5, 
       },
     },
     exit: {
@@ -56,16 +56,15 @@ export function Sidebar({
     },
   };
 
-  // Ensure sidebar is always open on md screens and larger
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        // 768px corresponds to md breakpoint
+
         setSidebarOpen(true);
       }
     };
 
-    handleResize(); // Initial check
+    handleResize(); 
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -75,7 +74,6 @@ export function Sidebar({
 
   return (
     <>
-      {/* Toggle Button, hidden on md and larger screens */}
       <button
         onClick={toggleSidebar}
         className={`fixed top-4 ${

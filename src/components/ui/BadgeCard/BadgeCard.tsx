@@ -48,7 +48,7 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
           <Card.Section className={classes.section} mt="md">
             <Group justify="apart">
               <Text fz="xl" fw={700}>
-                {doctor.name}
+                Dr. {doctor.name}
               </Text>
               <Badge size="lg" color="blue" variant="light">
                 {doctor.specialty}

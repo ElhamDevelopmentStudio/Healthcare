@@ -9,6 +9,7 @@ export interface Appointment {
   description: string;
   date: string;
   time: string;
+  cancelled: boolean;
 }
 
 interface AppointmentState {

@@ -13,6 +13,7 @@ import { DoctorList } from "../components/ui/DoctorList";
 export function DoctorListPage() {
   const dispatch = useAppDispatch();
   const doctors: Doctor[] = useSelector(selectAllDoctors);
+  console.log("Doctors from landing", doctors);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [specialty, setSpecialty] = useState<string | null>(null);
