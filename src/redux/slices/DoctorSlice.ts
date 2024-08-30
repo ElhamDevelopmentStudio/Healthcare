@@ -12,6 +12,9 @@ export interface Doctor {
   price: number;
   bio?: string;
   qualifications?: string[];
+  phoneNumber?: string;
+  location?: string;
+  email?: string;
 }
 
 interface DoctorState {

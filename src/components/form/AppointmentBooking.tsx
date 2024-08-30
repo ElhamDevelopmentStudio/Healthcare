@@ -62,9 +62,8 @@ export const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
   const onSubmit = async (data: AppointmentFormData) => {
     setIsSubmitting(true);
 
-    // Dispatch the addAppointment action to add the appointment to the store
     const appointment = {
-      id: uuidv4(), // Generate a unique ID for the appointment
+      id: uuidv4(), 
       doctorId,
       patientName: data.name,
       patientAge: data.age,
@@ -78,9 +77,6 @@ export const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
 
     console.log("Appointment booked:", { doctorId, ...data });
     setIsSubmitting(false);
-
-    // Optionally, reset the form after submission
-    // reset(); // Uncomment this line if you want to reset the form after submission
   };
 
   return (

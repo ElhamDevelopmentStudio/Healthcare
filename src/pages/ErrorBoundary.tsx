@@ -7,7 +7,6 @@ const ErrorBoundary = () => {
     <div className="min-h-screen overflow-hidden flex items-center justify-center ">
       <Container className="text-center ">
         <div className="flex flex-col items-center justify-center overflow-hidden ">
-          {/* Large 404 Title */}
           <Title order={1} className="text-8xl font-bold text-gray-900 mb-4">
             404
           </Title>
