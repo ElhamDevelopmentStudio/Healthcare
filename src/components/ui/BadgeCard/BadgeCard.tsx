@@ -47,7 +47,11 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
         <Box className={classes.contentWrapper}>
           <Card.Section className={classes.section} mt="md">
             <Group justify="apart">
-              <Text fz="xl" fw={700}>
+              <Text
+                fz="xl"
+                fw={700}
+                style={{ fontFamily: "New Amsterdam", letterSpacing: 3 }}
+              >
                 Dr. {doctor.name}
               </Text>
               <Badge size="lg" color="blue" variant="light">

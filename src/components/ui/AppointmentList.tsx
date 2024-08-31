@@ -3,7 +3,7 @@ import { Stack, Tabs, Text } from "@mantine/core";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import AppointmentCard from "./AppointmentCard";
 import { Appointment } from "../../redux/slices/AppointmentSlice";
-import { isBefore, startOfToday, endOfToday } from "date-fns";
+import { isBefore, startOfToday, isToday } from "date-fns";
 
 interface AppointmentListProps {
   appointments: Appointment[];
@@ -21,20 +21,21 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
   const now = new Date();
 
   const futureAppointments = appointments.filter(
-    (appointment) => isBefore(now, endOfToday()) && !appointment.cancelled
+    (appointment) =>
+      !appointment.cancelled &&
+      (isBefore(now, new Date(appointment.date)) ||
+        isToday(new Date(appointment.date)))
   );
 
   const pastAppointments = appointments.filter(
     (appointment) =>
-      isBefore(new Date(appointment.date), startOfToday()) ||
-      isBefore(now, new Date(appointment.date))
+      !appointment.cancelled &&
+      isBefore(new Date(appointment.date), startOfToday())
   );
 
   const cancelledAppointments = appointments.filter(
     (appointment) => appointment.cancelled
   );
-
-  console.log(cancelledAppointments);
 
   return (
     <Tabs defaultValue="future">

@@ -11,7 +11,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { DoctorDetailPage } from "./pages/DoctorDetailPage";
 import { Toaster } from "react-hot-toast";
 import AppointmentList from "./pages/AppointmentListPage";
-import Navbar from "./components/Navbar";
+import { Navbar } from "./components/Navbar";
 
 const Layout = () => (
   <div>

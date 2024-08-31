@@ -68,25 +68,6 @@ export function FavoriteDoctorsPage() {
   const doctorsPerPage = 8;
 
   useEffect(() => {
-    dispatch(fetchDoctors());
-  }, [dispatch]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
     if (status === "idle") {
       dispatch(fetchDoctors());
     }
@@ -147,14 +128,13 @@ export function FavoriteDoctorsPage() {
         setPriceRange={setPriceRange}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        setSidebarOpen={setIsSidebarOpen}
       />
 
       <motion.div
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        className={`transition-all duration-300 md:ml-64 ${
+        className={`transition-all duration-300 ${
           isSidebarOpen ? "md:ml-64" : "md:ml-0"
         }`}
       >

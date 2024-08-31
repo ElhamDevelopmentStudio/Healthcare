@@ -20,7 +20,7 @@ export function DoctorListPage() {
   const [availability, setAvailability] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -29,21 +29,6 @@ export function DoctorListPage() {
   useEffect(() => {
     dispatch(fetchDoctors());
   }, [dispatch]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const filteredDoctors = doctors.filter((doctor) => {
     return (
@@ -77,7 +62,6 @@ export function DoctorListPage() {
           setPriceRange={setPriceRange}
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
-          setSidebarOpen={setIsSidebarOpen} // Pass down the state setter
         />
 
         <div
