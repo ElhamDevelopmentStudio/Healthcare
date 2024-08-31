@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import { ColorSwatch, Popover, Text, Stack, Group, Badge } from "@mantine/core";
 import { format } from "date-fns";

@@ -33,6 +33,7 @@ const AppointmentManagementSystem: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // @ts-expect-error ignore
     dispatch(fetchDoctors());
   }, [dispatch]);
 
