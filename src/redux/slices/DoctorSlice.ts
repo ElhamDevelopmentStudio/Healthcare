@@ -34,7 +34,9 @@ const initialState: DoctorState = {
 export const fetchDoctors = createAsyncThunk<Doctor[]>(
   "doctors/fetchDoctors",
   async () => {
-    const response = await fetch("http://localhost:3001/doctors");
+    const response = await fetch(
+      `${import.meta.env.VITE_PUBLIC_DOCTOR_API}/doctors`
+    );
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -45,7 +47,9 @@ export const fetchDoctors = createAsyncThunk<Doctor[]>(
 export const fetchDoctorById = createAsyncThunk<Doctor, string>(
   "doctors/fetchDoctorById",
   async (doctorId) => {
-    const response = await fetch(`http://localhost:3001/doctor/${doctorId}`);
+    const response = await fetch(
+      `${import.meta.env.VITE_PUBLIC_DOCTOR_API}/doctor/${doctorId}`
+    );
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
