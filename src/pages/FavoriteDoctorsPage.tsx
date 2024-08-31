@@ -10,7 +10,6 @@ import {
   Button,
   Group,
   Center,
-  Loader,
   Pagination,
 } from "@mantine/core";
 import { Heart } from "lucide-react";
@@ -24,6 +23,8 @@ import {
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
 import { Sidebar } from "../components/ui/FiltersSidebar";
+import { ErrorDisplay } from "../components/ui/DoctorDetailError";
+import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -102,7 +103,7 @@ export function FavoriteDoctorsPage() {
   if (status === "loading") {
     return (
       <Center style={{ height: "100vh" }}>
-        <Loader size="xl" />
+        <LoadingSpinner />
       </Center>
     );
   }
@@ -110,7 +111,7 @@ export function FavoriteDoctorsPage() {
   if (status === "failed") {
     return (
       <Center style={{ height: "100vh" }}>
-        <Text>Error loading doctors. Please try again later.</Text>
+        <ErrorDisplay message="Error loading doctors. Please try again later." />
       </Center>
     );
   }

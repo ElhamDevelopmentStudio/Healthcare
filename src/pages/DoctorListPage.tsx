@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Container, Group, Pagination } from "@mantine/core";
+import { Center, Container, Group, Pagination } from "@mantine/core";
 import {
   fetchDoctors,
   selectAllDoctors,
   Doctor,
 } from "../redux/slices/DoctorSlice";
-import { useAppDispatch } from "../redux/store";
+import { RootState, useAppDispatch } from "../redux/store";
 import { Sidebar } from "../components/ui/FiltersSidebar";
 import { DoctorList } from "../components/ui/DoctorList";
+import { LoadingSpinner } from "../components/ui/LoadingSpinner";
+import { ErrorDisplay } from "../components/ui/DoctorDetailError";
 
 export function DoctorListPage() {
   const dispatch = useAppDispatch();
@@ -21,14 +23,17 @@ export function DoctorListPage() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const status = useSelector((state: RootState) => state.doctors.status);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   useEffect(() => {
-    dispatch(fetchDoctors());
-  }, [dispatch]);
+    if (status === "idle") {
+      dispatch(fetchDoctors());
+    }
+  }, [status, dispatch]);
 
   const filteredDoctors = doctors.filter((doctor) => {
     return (
@@ -47,6 +52,22 @@ export function DoctorListPage() {
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  if (status === "loading") {
+    return (
+      <Center style={{ height: "100vh" }}>
+        <LoadingSpinner />
+      </Center>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <Center style={{ height: "100vh" }}>
+        <ErrorDisplay message="Error loading doctors. Please try again later." />
+      </Center>
+    );
+  }
 
   return (
     <Container size="xl" py="xl">
