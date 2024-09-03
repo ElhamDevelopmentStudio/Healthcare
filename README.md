@@ -1,5 +1,38 @@
 # Doctor Appointment Management System
 
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+  - [Doctor Listing](#doctor-listing)
+  - [Doctor Details](#doctor-details)
+  - [Favorite Doctors](#favorite-doctors)
+  - [Appointment Management](#appointment-management)
+- [Technologies Used](#technologies-used)
+  - [Frontend](#frontend)
+  - [State Management](#state-management)
+- [Project Structure](#project-structure)
+  - [Pages](#pages)
+    - [DoctorListPage](#doctorlistpage)
+    - [DoctorDetailPage](#doctordetailpage)
+    - [FavoriteDoctorsPage](#favoritedoctorspage)
+    - [AppointmentManagementSystem](#appointmentmanagementsystem)
+  - [Redux Slices](#redux-slices)
+  - [Components](#components)
+- [Installation and Setup](#installation-and-setup)
+  - [Prerequisites](#prerequisites)
+  - [Clone the Repository](#clone-the-repository)
+  - [Install Dependencies](#install-dependencies)
+- [Backend Configuration](#backend-configuration)
+  - [1. Use the Hosted Mock API](#1-use-the-hosted-mock-api)
+  - [2. Run the Mock API Locally](#2-run-the-mock-api-locally)
+  - [Run the Healthcare Application](#run-the-healthcare-application)
+- [Folder Structure](#folder-structure)
+- [Usage](#usage)
+  - [Starting the Application](#starting-the-application)
+  - [Booking an Appointment](#booking-an-appointment)
+  - [Rescheduling or Canceling an Appointment](#rescheduling-or-canceling-an-appointment)
+- [Conclusion](#conclusion)
+
 ## Overview
 
 This web application is a Doctor Appointment Management System built using React with TypeScript and Vite as the development environment. The application leverages Mantine for UI components and Redux for state management, including Redux Persist for persistent state storage.
