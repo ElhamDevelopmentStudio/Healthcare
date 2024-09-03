@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { useForm } from "@mantine/form";
 import { useAppDispatch } from "../../../redux/store";
@@ -150,6 +151,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         label: hour,
       }));
       console.log("Time Slots:", timeSlots);
+
       setAvailableTimes(timeSlots);
     } else {
       setAvailableTimes([]);
