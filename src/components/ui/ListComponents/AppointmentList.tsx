@@ -1,8 +1,8 @@
 import React from "react";
 import { Stack, Tabs, Text } from "@mantine/core";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
-import AppointmentCard from "./AppointmentCard";
-import { Appointment } from "../../redux/slices/AppointmentSlice";
+import AppointmentCard from "../Cards/AppointmentCard";
+import { Appointment } from "../../../redux/slices/AppointmentSlice";
 import { isBefore, startOfToday, isToday } from "date-fns";
 
 interface AppointmentListProps {

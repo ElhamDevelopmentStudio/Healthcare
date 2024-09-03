@@ -8,7 +8,7 @@ export interface Doctor {
   specialty: string;
   description: string;
   badges: { icon: React.ReactNode; label: string }[];
-  availability: string[];
+  availability: { day: string; hours: string[] }[];
   price: number;
   bio?: string;
   qualifications?: string[];

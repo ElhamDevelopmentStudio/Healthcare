@@ -7,6 +7,8 @@ import { Appointment } from "../../redux/slices/AppointmentSlice";
 import { useSelector } from "react-redux";
 import { selectAllDoctors } from "../../redux/slices/DoctorSlice";
 
+import "@mantine/dates/styles.css";
+
 interface AppointmentCalendarProps {
   appointments: Appointment[];
 }
@@ -43,12 +45,13 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
               );
 
               return (
-                <Group key={appointment.id} align="apart" wrap="nowrap">
+                <Group key={appointment.id} align="center" wrap="">
                   <Text size="sm" fw={500}>
                     {appointment.time} - Dr. {doctor ? doctor.name : "Unknown"}
                   </Text>
                   <Badge
                     size="sm"
+                    className="mr-5"
                     color={appointment.cancelled ? "red" : "blue"}
                   >
                     {appointment.cancelled ? "Cancelled" : "Active"}

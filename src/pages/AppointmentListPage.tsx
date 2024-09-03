@@ -22,12 +22,12 @@ import {
   MultiSelect,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import RescheduleModal from "../components/form/Reschedule";
-import NewAppointmentModal from "../components/form/NewAppointment";
-import FilterDrawer from "../components/ui/FilterDrawer";
+import FilterDrawer from "../components/ui/Filters/FilterDrawer";
 import AppointmentCalendar from "../components/ui/AppointmentCalender";
-import AppointmentList from "../components/ui/AppointmentList";
-import KanbanAppointmentBoard from "../components/ui/AppointmentKanban";
+import AppointmentList from "../components/ui/ListComponents/AppointmentList";
+import KanbanAppointmentBoard from "../components/ui/ListComponents/AppointmentKanban";
+import AppointmentForm from "../components/ui/Modals/AppointmentModal";
+import RescheduleForm from "../components/form/RescheduleForm";
 
 const AppointmentManagementSystem: React.FC = () => {
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const AppointmentManagementSystem: React.FC = () => {
   const [viewMode, setViewMode] = useState<"list" | "calendar" | "grid">(
     "list"
   );
-  const [rescheduleModalOpened, setRescheduleModalOpened] = useState(false);
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
 
   const [
     filterDrawerOpened,
@@ -64,14 +64,12 @@ const AppointmentManagementSystem: React.FC = () => {
     showCancelled: false,
   });
 
-  // Search filter criteria options
   const filterOptions = [
     { value: "doctorName", label: "Doctor Name" },
     { value: "patientName", label: "Patient Name" },
     { value: "description", label: "Description" },
   ];
 
-  // State to manage active search filters
   const [activeFilters, setActiveFilters] = useState<string[]>([
     "doctorName",
     "patientName",
@@ -133,12 +131,7 @@ const AppointmentManagementSystem: React.FC = () => {
 
   const handleReschedule = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
-    setRescheduleModalOpened(true);
-  };
-
-  const closeModal = () => {
-    setRescheduleModalOpened(false);
-    setSelectedAppointment(null);
+    setIsRescheduleModalOpen(true);
   };
 
   const handleApplyFilters = useCallback((newFilters: typeof filters) => {
@@ -222,18 +215,21 @@ const AppointmentManagementSystem: React.FC = () => {
         onApplyFilters={handleApplyFilters}
       />
 
-      <NewAppointmentModal
-        opened={isNewAppointmentModalOpen}
+      <AppointmentForm
+        isOpen={isNewAppointmentModalOpen}
         onClose={() => setIsNewAppointmentModalOpen(false)}
         doctors={doctors}
+        parentComponent="AppointmentManagementSystem"
       />
 
-      <RescheduleModal
-        opened={rescheduleModalOpened}
-        onClose={closeModal}
-        appointment={selectedAppointment}
-        doctors={doctors}
-      />
+      {selectedAppointment && (
+        <RescheduleForm
+          isOpen={isRescheduleModalOpen}
+          onClose={() => setIsRescheduleModalOpen(false)}
+          appointment={selectedAppointment}
+          doctor={doctors.find((d) => d.id === selectedAppointment.doctorId)!}
+        />
+      )}
     </Container>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Drawer, Stack, MultiSelect, Switch, Button } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { parse } from "date-fns";
-import { Doctor } from "../../redux/slices/DoctorSlice";
+import { Doctor } from "../../../redux/slices/DoctorSlice";
 
 interface FilterDrawerProps {
   opened: boolean;

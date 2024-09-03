@@ -28,11 +28,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <span className="text-blue-600 font-bold text-xl">
-              <img
-                src="/logo.png"
-                alt="Logo"
-                className="h-12 w-auto" // Adjust height and set width to auto to maintain aspect ratio
-              />
+              <img src="/logo.png" alt="Logo" className="h-12 w-auto" />
             </span>
           </div>
           <div className="hidden sm:block">

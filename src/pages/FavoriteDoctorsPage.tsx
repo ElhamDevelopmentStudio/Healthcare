@@ -22,7 +22,7 @@ import {
 } from "../redux/slices/DoctorSlice";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
-import { Sidebar } from "../components/ui/FiltersSidebar";
+import { Sidebar } from "../components/ui/Filters/FiltersSidebar";
 import { ErrorDisplay } from "../components/ui/DoctorDetailError";
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 
@@ -88,7 +88,9 @@ export function FavoriteDoctorsPage() {
       doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (!specialty || doctor.specialty === specialty) &&
       (availability.length === 0 ||
-        availability.some((day) => doctor.availability.includes(day))) &&
+        availability.some((day) =>
+          doctor.availability.map((slot) => slot.day).includes(day)
+        )) &&
       doctor.price >= priceRange[0] &&
       doctor.price <= priceRange[1]
     );

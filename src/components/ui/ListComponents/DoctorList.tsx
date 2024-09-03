@@ -1,7 +1,7 @@
 import { Grid, Title, Text } from "@mantine/core";
 import { motion, AnimatePresence } from "framer-motion";
-import { BadgeCard } from "./BadgeCard/BadgeCard";
-import { Doctor } from "../../redux/slices/DoctorSlice";
+import { BadgeCard } from "../BadgeCard/BadgeCard";
+import { Doctor } from "../../../redux/slices/DoctorSlice";
 
 type DoctorListProps = {
   displayedDoctors: Doctor[];

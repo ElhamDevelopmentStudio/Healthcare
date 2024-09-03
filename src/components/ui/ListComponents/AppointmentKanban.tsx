@@ -23,9 +23,9 @@ import {
   cancelAppointment,
   removeAppointment,
   updateAppointment,
-} from "../../redux/slices/AppointmentSlice";
-import { RootState } from "../../redux/store";
-import AppointmentCard from "./AppointmentCard";
+} from "../../../redux/slices/AppointmentSlice";
+import { RootState } from "../../../redux/store";
+import AppointmentCard from "../Cards/AppointmentCard";
 
 const DAYS_OF_WEEK = [
   "Sunday",

@@ -9,6 +9,7 @@ import {
   Button,
   ActionIcon,
   Box,
+  Tooltip,
 } from "@mantine/core";
 import { toggleFavorite } from "../../../redux/slices/FavoriteSlice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
@@ -35,16 +36,26 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card withBorder radius="md" p="md" className={classes.card}>
-        <Card.Section>
+      <Card
+        withBorder
+        radius="md"
+        p="md"
+        className={classes.card}
+        style={{ height: "600px", display: "flex", flexDirection: "column" }}
+      >
+        <Card.Section style={{ height: "250px", overflow: "hidden" }}>
           <Image
             src={doctor.image}
             alt={doctor.name}
             height={250}
-            style={{ objectFit: "cover" }}
+            fallbackSrc="/placeholder-image.jpg"
+            style={{ objectFit: "cover", width: "100%", height: "100%" }}
           />
         </Card.Section>
-        <Box className={classes.contentWrapper}>
+        <Box
+          className={classes.contentWrapper}
+          style={{ flex: 1, display: "flex", flexDirection: "column" }}
+        >
           <Card.Section className={classes.section} mt="md">
             <Group justify="apart">
               <Text
@@ -63,11 +74,19 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
               mt="xs"
               color="dimmed"
               className={classes.description}
+              style={{
+                height: "3em",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
             >
               {doctor.description}
             </Text>
           </Card.Section>
-          <Card.Section className={classes.section}>
+          <Card.Section
+            className={classes.section}
+            style={{ flex: 1, overflowY: "auto" }}
+          >
             <Text mt="md" className={classes.label} c="dimmed">
               Specializations
             </Text>
@@ -89,12 +108,35 @@ export function BadgeCard({ doctor }: BadgeCardProps) {
               ))}
             </Group>
           </Card.Section>
+          <Card.Section className={classes.section} mt="md">
+            <Text mt="md" className={classes.label} c="dimmed">
+              Availability
+            </Text>
+            <Group gap={7} mt={5}>
+              {doctor.availability.map((slot) => (
+                <Tooltip
+                  key={slot.day}
+                  label={slot.hours.join(", ")}
+                  withArrow
+                  arrowSize={6}
+                  transitionProps={{ transition: "fade", duration: 200 }}
+                  position="top"
+                >
+                  <Badge variant="filled" color="green">
+                    {slot.day}
+                  </Badge>
+                </Tooltip>
+              ))}
+            </Group>
+          </Card.Section>
         </Box>
         <Group mt="xs" className={classes.footer}>
           <motion.div style={{ flex: 1 }} whileHover={{ scale: 1.02 }}>
-            <Button radius="md" fullWidth color="blue">
-              <Link to={`/doctor/${doctor.id}`}>Book Appointment</Link>
-            </Button>
+            <Link to={`/doctor/${doctor.id}`}>
+              <Button radius="md" fullWidth color="blue">
+                Book Appointment
+              </Button>
+            </Link>
           </motion.div>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
             <ActionIcon

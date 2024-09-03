@@ -7,8 +7,8 @@ import {
   Doctor,
 } from "../redux/slices/DoctorSlice";
 import { RootState, useAppDispatch } from "../redux/store";
-import { Sidebar } from "../components/ui/FiltersSidebar";
-import { DoctorList } from "../components/ui/DoctorList";
+import { Sidebar } from "../components/ui/Filters/FiltersSidebar";
+import { DoctorList } from "../components/ui/ListComponents/DoctorList";
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { ErrorDisplay } from "../components/ui/DoctorDetailError";
 
@@ -39,7 +39,11 @@ export function DoctorListPage() {
       doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (!specialty || doctor.specialty === specialty) &&
       (availability.length === 0 ||
-        availability.some((day) => doctor.availability.includes(day))) &&
+        availability.some((day) =>
+          doctor.availability.some(
+            (slot) => slot.day.toLowerCase() === day.toLowerCase()
+          )
+        )) &&
       doctor.price >= priceRange[0] &&
       doctor.price <= priceRange[1]
     );
