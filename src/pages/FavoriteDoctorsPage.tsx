@@ -22,7 +22,7 @@ import {
 } from "../redux/slices/DoctorSlice";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
-import { Sidebar } from "../components/ui/Filters/FiltersSidebar";
+import { Sidebar } from "../components/ui/Filters/DoctorListFiltersSidebar";
 import { ErrorDisplay } from "../components/ui/DoctorDetailError";
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 

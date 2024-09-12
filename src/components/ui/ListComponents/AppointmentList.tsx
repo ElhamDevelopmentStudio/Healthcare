@@ -2,6 +2,8 @@ import React from "react";
 import { Stack, Tabs, Text } from "@mantine/core";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import AppointmentCard from "../Cards/AppointmentCard";
+import { useSelector } from "react-redux";
+import { selectCanceledAppointments } from "../../../redux/slices/AppointmentSlice"; // Redux selector for canceled appointments
 import { Appointment } from "../../../redux/slices/AppointmentSlice";
 import { isBefore, startOfToday, isToday } from "date-fns";
 
@@ -33,9 +35,7 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
       isBefore(new Date(appointment.date), startOfToday())
   );
 
-  const cancelledAppointments = appointments.filter(
-    (appointment) => appointment.cancelled
-  );
+  const cancelledAppointments = useSelector(selectCanceledAppointments);
 
   return (
     <Tabs defaultValue="future">
@@ -45,6 +45,7 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
         <Tabs.Tab value="canceled">Canceled Appointments</Tabs.Tab>
       </Tabs.List>
 
+      {/* Future Appointments */}
       <Tabs.Panel value="future" pt="xs">
         <AnimatePresence>
           <LayoutGroup>
@@ -74,6 +75,7 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
         </AnimatePresence>
       </Tabs.Panel>
 
+      {/* Past Appointments */}
       <Tabs.Panel value="past" pt="xs">
         <AnimatePresence>
           <LayoutGroup>
@@ -103,6 +105,7 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
         </AnimatePresence>
       </Tabs.Panel>
 
+      {/* Canceled Appointments */}
       <Tabs.Panel value="canceled" pt="xs">
         <AnimatePresence>
           <LayoutGroup>

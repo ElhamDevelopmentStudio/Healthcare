@@ -80,3 +80,8 @@ export default appointmentSlice.reducer;
 
 export const selectAppointments = (state: RootState) =>
   state.appointments.appointments;
+
+export const selectCanceledAppointments = (state: RootState) =>
+  state.appointments.appointments.filter(
+    (appointment) => appointment.cancelled
+  );

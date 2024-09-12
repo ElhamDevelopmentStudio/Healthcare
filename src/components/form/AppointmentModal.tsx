@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { useForm } from "@mantine/form";
-import { useAppDispatch } from "../../../redux/store";
+import { useAppDispatch } from "../../redux/store";
 import {
   addAppointment,
   Appointment,
-} from "../../../redux/slices/AppointmentSlice";
-import { Doctor } from "../../../redux/slices/DoctorSlice";
+} from "../../redux/slices/AppointmentSlice";
+import { Doctor } from "../../redux/slices/DoctorSlice";
 import {
   TextInput,
   NumberInput,
@@ -18,6 +18,8 @@ import {
   Modal,
   Tabs,
   Badge,
+  Combobox,
+  useCombobox,
 } from "@mantine/core";
 import { Clock } from "lucide-react";
 
@@ -56,6 +58,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     nextWeek: [],
   });
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);
+  const [search, setSearch] = useState(doctor?.name || "");
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+  });
 
   const form = useForm<FormValues>({
     initialValues: {
@@ -98,14 +104,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       const currentDate = new Date(today);
       currentDate.setDate(today.getDate() + i);
 
-      // Normalize day names to lowercase for consistent comparison
       const dayName = currentDate
-        .toLocaleDateString("en-US", {
+        .toLocaleDateString("en-GB", {
           weekday: "long",
         })
         .toLowerCase();
 
-      // Ensure the backend day name is also normalized
       const availableDay = selectedDoctor.availability.find(
         (day) => day.day.toLowerCase() === dayName
       );
@@ -129,14 +133,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
     if (!selectedDoctor) return;
 
-    // Get the selected day of the week in lowercase
     const selectedDay = new Date(date)
-      .toLocaleDateString("en-US", {
+      .toLocaleDateString("en-GB", {
         weekday: "long",
       })
       .toLowerCase();
 
-    // Find the available day by comparing lowercase day names
     const availableDay = selectedDoctor.availability.find(
       (day) => day.day.toLowerCase() === selectedDay
     );
@@ -164,6 +166,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     form.setFieldValue("doctorId", doctorId);
     form.setFieldValue("date", "");
     form.setFieldValue("time", "");
+    setSearch(newSelectedDoctor?.name || "");
   };
 
   const handleSubmit = (values: FormValues) => {
@@ -182,6 +185,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     setAvailableTimes([]);
     onClose();
   };
+
+  const filteredDoctors = doctors?.filter((d) =>
+    d.name.toLowerCase().includes(search.toLowerCase().trim())
+  );
 
   const renderDateBadges = (dates: string[]) => (
     <Group mt="xs">
@@ -214,14 +221,41 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="md">
           {parentComponent === "AppointmentManagementSystem" && doctors && (
-            <Select
-              label="Select Doctor"
-              placeholder="Choose a doctor"
-              data={doctors.map((d) => ({ value: d.id, label: d.name }))}
-              {...form.getInputProps("doctorId")}
-              onChange={handleDoctorChange}
-              required
-            />
+            <Combobox
+              store={combobox}
+              onOptionSubmit={(value) => {
+                handleDoctorChange(value);
+                combobox.closeDropdown();
+              }}
+            >
+              <Combobox.Target>
+                <TextInput
+                  label="Select Doctor"
+                  placeholder="Search and select a doctor"
+                  value={search}
+                  onChange={(event) => {
+                    setSearch(event.currentTarget.value);
+                    combobox.openDropdown();
+                    combobox.updateSelectedOptionIndex();
+                  }}
+                  onClick={() => combobox.openDropdown()}
+                  onFocus={() => combobox.openDropdown()}
+                  onBlur={() => combobox.closeDropdown()}
+                  error={form.errors.doctorId}
+                  required
+                />
+              </Combobox.Target>
+
+              <Combobox.Dropdown>
+                <Combobox.Options>
+                  {filteredDoctors?.map((doctor) => (
+                    <Combobox.Option value={doctor.id} key={doctor.id}>
+                      {doctor.name}
+                    </Combobox.Option>
+                  ))}
+                </Combobox.Options>
+              </Combobox.Dropdown>
+            </Combobox>
           )}
           <TextInput
             label="Patient Name"

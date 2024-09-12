@@ -65,13 +65,16 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
       <Stack gap="md">
         <MultiSelect
           label="Doctors"
-          placeholder="Select doctors"
+          placeholder="Search and select doctors"
           data={doctors.map((doctor) => ({
             value: doctor.id,
             label: `Dr. ${doctor.name}`,
           }))}
           value={selectedDoctors}
           onChange={setSelectedDoctors}
+          searchable
+          nothingFoundMessage="No doctors found"
+          clearable
         />
         <DatePickerInput
           label="Date"

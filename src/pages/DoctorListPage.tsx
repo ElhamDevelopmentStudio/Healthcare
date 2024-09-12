@@ -7,7 +7,7 @@ import {
   Doctor,
 } from "../redux/slices/DoctorSlice";
 import { RootState, useAppDispatch } from "../redux/store";
-import { Sidebar } from "../components/ui/Filters/FiltersSidebar";
+import { Sidebar } from "../components/ui/Filters/DoctorListFiltersSidebar";
 import { DoctorList } from "../components/ui/ListComponents/DoctorList";
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { ErrorDisplay } from "../components/ui/DoctorDetailError";
@@ -39,9 +39,9 @@ export function DoctorListPage() {
       doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (!specialty || doctor.specialty === specialty) &&
       (availability.length === 0 ||
-        availability.some((day) =>
+        availability.some((dayAva) =>
           doctor.availability.some(
-            (slot) => slot.day.toLowerCase() === day.toLowerCase()
+            (slot) => slot.day.toLowerCase() === dayAva.toLowerCase()
           )
         )) &&
       doctor.price >= priceRange[0] &&
@@ -57,11 +57,7 @@ export function DoctorListPage() {
   );
 
   if (status === "loading") {
-    return (
-      <Center style={{ height: "100vh" }}>
-        <LoadingSpinner />
-      </Center>
-    );
+    return <LoadingSpinner />;
   }
 
   if (status === "failed") {

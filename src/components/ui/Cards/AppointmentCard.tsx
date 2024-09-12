@@ -20,7 +20,7 @@ import {
   Trash2,
   MoreVertical,
 } from "lucide-react";
-import { endOfToday, format, isBefore } from "date-fns";
+import { format, isBefore } from "date-fns";
 import { useSelector } from "react-redux";
 import { Appointment } from "../../../redux/slices/AppointmentSlice";
 import { selectAllDoctors } from "../../../redux/slices/DoctorSlice";
@@ -47,7 +47,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
     exit: { opacity: 0, y: -20 },
   };
 
-  const isFutureAppointment = isBefore(new Date(), endOfToday());
+  const isFutureAppointment = isBefore(new Date(), new Date(appointment.date));
 
   const getStatusColor = (): string => {
     if (appointment.cancelled) return "red";

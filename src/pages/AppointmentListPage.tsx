@@ -22,12 +22,12 @@ import {
   MultiSelect,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import FilterDrawer from "../components/ui/Filters/FilterDrawer";
+import FilterDrawer from "../components/ui/Filters/AppointmentFilterDrawer";
 import AppointmentCalendar from "../components/ui/AppointmentCalender";
 import AppointmentList from "../components/ui/ListComponents/AppointmentList";
 import KanbanAppointmentBoard from "../components/ui/ListComponents/AppointmentKanban";
-import AppointmentForm from "../components/ui/Modals/AppointmentModal";
 import RescheduleForm from "../components/form/RescheduleForm";
+import AppointmentForm from "../components/form/AppointmentModal";
 
 const AppointmentManagementSystem: React.FC = () => {
   const dispatch = useDispatch();

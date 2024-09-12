@@ -8,8 +8,8 @@ import { Appointment } from "../redux/slices/AppointmentSlice";
 import { DoctorCard } from "../components/ui/Cards/DoctorCard";
 import { BookAppointment } from "../components/ui/Cards/BookAppointmentCard";
 import { DoctorDetailAppointmentList } from "../components/ui/ListComponents/DoctorDetailAppointmentList";
-import AppointmentForm from "../components/ui/Modals/AppointmentModal";
 import RescheduleForm from "../components/form/RescheduleForm";
+import AppointmentForm from "../components/form/AppointmentModal";
 
 export const DoctorDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
